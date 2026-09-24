@@ -39,8 +39,9 @@ anything derived from the data.
 - **Channels:** `vibration_1`, `phase_current_1`, `phase_current_2`, recorded at 64 kHz.
 
 ### Preprocessing (`python -m bearing.prepare paderborn`)
-- Zero-phase FIR decimation by 4 gives **16 kHz**, which drops content above 8 kHz (see
-  [ADR 0002](adr/0002-preprocessing.md)).
+- Zero-phase FIR decimation by 4 gives **16 kHz**, which drops content above 8 kHz. On
+  the first 160 real recordings that's 43% of vibration power, so a 32 kHz run is part of
+  the protocol (see [ADR 0002](adr/0002-preprocessing.md)).
 - Windows of 2048 samples (128 ms) with a stride of 1024 (50% overlap). A contiguous block
   of 16 windows is taken from the middle of each recording.
 - Files that fail to load are skipped and listed in `dataset.json` (`skipped_files`).
@@ -54,7 +55,9 @@ make download-sample      # K001 + KA01, ~330 MB
 .venv/bin/python -c "from pathlib import Path; from bearing.data import paderborn as p; \
 r,s=p.load_all(Path('data/raw/paderborn')); print(len(r),'loaded',len(s),'skipped'); print(r[0])"
 ```
-You should see 160 recordings loaded and 0 skipped. If anything is skipped, the error
+You should see 160 recordings loaded and 0 skipped. **Verified 2026-09-24:** 160 loaded, 0
+skipped. The real files match the documented layout (fields `Info`, `X`, `Y`,
+`Description`; 64 kHz channels with about 256k samples; mechanical channels at 4 kHz). If anything is skipped, the error
 lists the channel names the file actually contains.
 
 ## CWRU bearing data: sanity check only

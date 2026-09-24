@@ -1,4 +1,4 @@
-.PHONY: install lint test smoke download-sample download prepare results serve-fixture
+.PHONY: install lint test smoke download-sample download prepare results prepare-32k results-32k serve-fixture
 
 install:
 	python3 -m venv .venv && .venv/bin/pip install -e ".[dev,cnn,tracking]"
@@ -27,6 +27,13 @@ prepare:
 
 results:
 	.venv/bin/python -m bearing.run --data data/processed/paderborn --out results/paderborn
+
+# Ablation (ADR 0002): same 128 ms windows at 32 kHz, keeping the 8-16 kHz band.
+prepare-32k:
+	.venv/bin/python -m bearing.prepare paderborn --raw data/raw/paderborn --out data/processed/paderborn-32k --decimate 2 --window 4096 --stride 2048
+
+results-32k:
+	.venv/bin/python -m bearing.run --data data/processed/paderborn-32k --out results/paderborn-32k
 
 serve-fixture:
 	.venv/bin/python scripts/fixture_model.py models/fixture

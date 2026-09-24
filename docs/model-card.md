@@ -50,7 +50,9 @@ Latency p50/p95 on TBD hardware: TBD ms. Size: TBD.
   900 rpm fold is the likeliest to fail. Measured: TBD.
 - **Class set is closed:** combined damage, ball faults, misalignment or looseness will be
   forced into one of three classes.
-- **Decimation** removes content above 8 kHz, which can carry early-fault resonance.
+- **Decimation** to 16 kHz removes the band above 8 kHz: 43% of vibration power on average
+  in the first 160 real recordings, and very different between the two bearings measured
+  (see ADR 0002). The 32 kHz ablation result: TBD.
 - **Small number of physical bearings** (6 healthy, 11 inner, 12 outer), so B2 and D
   estimates rest on a handful of test bearings and have high variance. Read the ± values.
 
