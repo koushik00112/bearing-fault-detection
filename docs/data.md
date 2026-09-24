@@ -48,8 +48,8 @@ anything derived from the data.
 
 ### Verify the loader on real files first
 The `.mat` layout (a struct with field `Y`, whose entries have `Name` and `Data`) follows
-the KAt documentation. The loader is tested against files built to that layout, not yet
-against the real files. Before the full download, run:
+the KAt documentation, and the unit tests use files built to that layout. On a new machine,
+check against real files before the full download:
 ```bash
 make download-sample      # K001 + KA01, ~330 MB
 .venv/bin/python -c "from pathlib import Path; from bearing.data import paderborn as p; \
@@ -57,8 +57,8 @@ r,s=p.load_all(Path('data/raw/paderborn')); print(len(r),'loaded',len(s),'skippe
 ```
 You should see 160 recordings loaded and 0 skipped. **Verified 2026-09-24:** 160 loaded, 0
 skipped. The real files match the documented layout (fields `Info`, `X`, `Y`,
-`Description`; 64 kHz channels with about 256k samples; mechanical channels at 4 kHz). If anything is skipped, the error
-lists the channel names the file actually contains.
+`Description`; 64 kHz channels with about 256k samples; mechanical channels at 4 kHz).
+If anything is skipped, the error lists the channel names the file actually contains.
 
 ## CWRU bearing data: sanity check only
 
