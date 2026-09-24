@@ -1,0 +1,17 @@
+name: bearing-fault-detection
+
+# Serves the model in ./models/serving (copy an exported model there; see README).
+# The telemetry platform runs from its own repo on :8000; the replay script talks to both.
+services:
+  model:
+    build:
+      context: .
+      args:
+        WITH_TORCH: ${WITH_TORCH:-0}
+    image: bearing-model:local
+    environment:
+      MODEL_DIR: /models
+    volumes:
+      - ./models/serving:/models:ro
+    ports:
+      - "8100:8100"

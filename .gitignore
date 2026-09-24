@@ -1,0 +1,19 @@
+.venv/
+__pycache__/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+# Raw and processed data are licensed (Paderborn: CC BY-NC 4.0) and large: never commit.
+/data/
+# Models trained on Paderborn are derived from licensed data; results are committed
+# selectively (summary.md and figures), see README.
+/models/
+results/**/models/
+results/**/mlruns/
+results/**/runs.json
+.replay_devices.json
+# Synthetic smoke runs are never results
+results/synthetic-*/
+results/ci-*/
