@@ -64,3 +64,11 @@ the report lists the 15 worst. Write-up questions to answer from it: Which beari
 and are they the same across models? Does performance collapse at 900 rpm (scenario C,
 where fault frequencies shift)? In D, which real-damage bearings get confused, and with
 which class?
+
+## Outcome (run of 2026-09-25)
+The hypothesis held, but the size of the effect was the surprise: from 0.99 (A and B) to
+about 0.5 (B2) for the best models. B was *not* meaningfully below A, so on Paderborn
+splitting by recording removes almost none of the inflation; splitting by bearing is what
+matters. A supporting check found that the features identify the individual bearing among
+29 with 98.9% accuracy on held-out recordings. Numbers and discussion: the README's
+Results section and `results/paderborn/summary.md`.

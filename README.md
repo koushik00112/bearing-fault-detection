@@ -15,21 +15,57 @@ when the test data is genuinely new**. The model is served as an API and plugged
 [Protocol](docs/evaluation-protocol.md) · [Data and licences](docs/data.md) ·
 [Model card](docs/model-card.md) · [Decisions](docs/adr)
 
-## Results
+## Results (measured 2026-09-25, Paderborn, 2,319 recordings, 16 kHz)
 
-**Not run yet.** The table below is filled from `results/paderborn/summary.md` after the
-full run on Paderborn data. Nothing here is estimated.
+**Headline: the models score 0.99 when the test bearings were seen in training, and
+0.34–0.51 when they weren't.** For three classes, chance is about 0.33.
 
-| Scenario | RF | HGB | 1D CNN |
+| Scenario | Random forest | Gradient boosting | 1D CNN |
 |---|---|---|---|
-| A: random windows (leaky, on purpose) | | | |
-| B: recording-level | | | |
-| B2: bearing-level (headline) | | | |
-| C: leave one condition out | | | |
-| D: artificial → real damage | | | |
+| A: random windows (leaky, on purpose) | 0.992 ± 0.000 | 0.997 ± 0.001 | 0.964 ± 0.008 |
+| B: new recordings of seen bearings | 0.990 ± 0.002 | 0.995 ± 0.001 | 0.950 ± 0.016 |
+| **B2: bearings never seen in training** | **0.513 ± 0.208** | **0.495 ± 0.236** | **0.339 ± 0.142** |
+| C: operating condition never seen | 0.832 ± 0.005 | 0.779 ± 0.000 | 0.561 ± 0.024 |
+| D: train on artificial damage, test on real | 0.412 ± 0.002 | 0.429 ± 0.000 | 0.451 ± 0.012 |
 
-Macro-F1, mean ± std over 5 seeds. Hypothesis (stated in advance, from published
-findings): A is highest; B2, C and D drop. The results will be reported whatever they show.
+Macro-F1, mean ± sample std over 5 seeds. Gradient boosting's ±0.000 in C and D isn't
+stability: the model is deterministic, and those splits don't change with the seed. Full
+report with per-class recall, confusion matrices, per-fold C, noise and error analysis:
+[results/paderborn/summary.md](results/paderborn/summary.md).
+
+**Why A and B look so good:** each physical bearing has a strong individual fingerprint.
+Given a window from a recording it has never seen, a random forest names the exact bearing
+out of 29 with **98.9%** accuracy, where chance is 3.4% (`results/paderborn/extra_checks.json`).
+When those bearings are also in training (A, B), the classifier can lean on that fingerprint.
+Hold the bearings out (B2) and most of the score disappears. In D, most test bearings are
+classified *entirely* one way (per-bearing accuracy of 0.00 or 1.00). For example, healthy
+bearings K004 and K005 are always called faulty, while K006 is always right.
+
+**Other findings:**
+- **Unseen conditions (C):** the 900 rpm fold is hardest (random forest 0.69, CNN 0.26),
+  because fault frequencies scale with shaft speed. The 1500 rpm, 0.7 Nm, 1000 N fold is
+  easiest (tree models 0.95–0.98, CNN 0.85).
+- **32 kHz instead of 16 kHz** (B and B2 only, [ADR 0002](docs/adr/0002-preprocessing.md)):
+  B2 improves slightly, by +0.04 on average, and random forest and gradient boosting
+  improve in 4 of 5 seeds. That's real but small next to the ±0.2 spread, and it doesn't
+  change the conclusion. B is unchanged.
+- **CWRU sanity check:** 0.91–0.98 even with the load held out. It's much easier than
+  Paderborn, which is why it's only a sanity check.
+- **Noise:** on B2, the tree models drop to about 0.25–0.31 from 20 dB SNR downwards; the
+  CNN holds until about 5 dB. With a clean B2 score this low, the noise curve says little.
+- **Latency** (single window, Apple M3 CPU): CNN 0.27 ms, 103 KiB. Gradient boosting
+  13.6 ms and random forest 17.9 ms, dominated by feature extraction.
+
+**Hypothesis check:** stated in advance, "A highest; B2, C and D drop." That held, but the
+size of the B2 drop (0.99 to about 0.5) was larger than expected, and B was *not* lower
+than A: recording-level splitting alone removes almost none of the inflation on this
+dataset.
+
+**What this means:** these models don't reliably detect faults on bearings they haven't
+seen. Bearing-level evaluation is essential, and a random-window or even recording-level
+split would have reported about 0.99 for a model that is close to guessing on new
+hardware. Improving B2 and D (domain adaptation, per-bearing normalisation, features
+invariant to speed) is the natural next step.
 
 ## Quick start (no download, synthetic data)
 

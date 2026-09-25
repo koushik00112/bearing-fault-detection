@@ -42,3 +42,18 @@ identity, which is exactly what scenario B2 is designed to expose.
 - The 50% overlap is what makes scenario A leaky. Keeping it is deliberate: it's the common
   practice being measured.
 - All parameters are CLI flags on `bearing.prepare` and recorded in `dataset.json`.
+
+## Result (2026-09-25)
+Scenario B2, macro-F1 at 32 kHz minus 16 kHz, per seed (the held-out bearings are the same
+at both rates):
+
+| Model | Per-seed difference | Mean | Better in |
+|---|---|---|---|
+| Random forest | +0.036, +0.039, +0.066, +0.074, −0.024 | +0.038 | 4/5 |
+| Gradient boosting | +0.109, +0.042, +0.019, +0.070, −0.004 | +0.047 | 4/5 |
+| CNN | −0.009, +0.086, −0.048, +0.075, +0.087 | +0.038 | 3/5 |
+
+Scenario B is unchanged (random forest 0.990 at both rates). So the 8–16 kHz band helps a
+little on unseen bearings, but the effect is small next to the ±0.2 spread between seeds,
+and 32 kHz doesn't fix the bearing-level gap. The default stays at 16 kHz (half the memory),
+with this table as the record.
