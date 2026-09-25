@@ -51,7 +51,17 @@ CONDITIONS: dict[str, tuple[int, float, int]] = {
 CHANNELS = ("vibration_1", "phase_current_1", "phase_current_2")
 
 # What a corrupt, truncated or unexpected file can raise; such files are skipped and listed.
-READ_ERRORS = (ValueError, OSError, NotImplementedError, MatReadError, KeyError, AttributeError)
+# Real example: KA08/N15_M01_F10_KA08_2.mat raises TypeError ("Expecting matrix here")
+# inside scipy's MAT reader (found 2026-09-25, the only unreadable file of 2,320).
+READ_ERRORS = (
+    ValueError,
+    OSError,
+    NotImplementedError,
+    MatReadError,
+    KeyError,
+    AttributeError,
+    TypeError,
+)
 
 FILENAME = re.compile(r"^(?P<cond>N\d\d_M\d\d_F\d\d)_(?P<code>K[AIB]?\d\d\d?)_(?P<rep>\d+)\.mat$")
 

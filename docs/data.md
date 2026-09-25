@@ -45,6 +45,8 @@ anything derived from the data.
 - Windows of 2048 samples (128 ms) with a stride of 1024 (50% overlap). A contiguous block
   of 16 windows is taken from the middle of each recording.
 - Files that fail to load are skipped and listed in `dataset.json` (`skipped_files`).
+  **Known:** `KA08/N15_M01_F10_KA08_2.mat` is corrupt (scipy: "Expecting matrix here"),
+  so the 3-class set is 2,319 of 2,320 recordings.
 
 ### Verify the loader on real files first
 The `.mat` layout (a struct with field `Y`, whose entries have `Name` and `Data`) follows

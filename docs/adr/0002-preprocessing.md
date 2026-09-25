@@ -30,8 +30,11 @@ identity, which is exactly what scenario B2 is designed to expose.
 - Default: zero-phase FIR decimation by 4 to **16 kHz**, 2048-sample windows (128 ms,
   about 3 revolutions at 1500 rpm), stride 1024, a contiguous middle block of 16 windows
   per recording (about 0.9 GB).
-- **Required ablation:** repeat the protocol at **32 kHz** (`--decimate 2 --window 4096
-  --stride 2048`, the same 128 ms, about 1.8 GB) and report both. The interesting number is
+- **Required ablation:** repeat scenarios B and B2 at **32 kHz** (`--decimate 2 --window
+  4096 --stride 2048`, the same 128 ms, about 1.8 GB) and report both. Limited to B and B2
+  because those answer the question below, and all five scenarios would add about 4 h of
+  CNN training (estimated from timing on the sample: about 1 s per epoch per 2,560 windows
+  at 16 kHz). The interesting number is
   whether 32 kHz helps in B and B2 or only in B, where the bearing-identity shortcut is
   available.
 

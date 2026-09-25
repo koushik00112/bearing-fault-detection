@@ -32,8 +32,10 @@ results:
 prepare-32k:
 	.venv/bin/python -m bearing.prepare paderborn --raw data/raw/paderborn --out data/processed/paderborn-32k --decimate 2 --window 4096 --stride 2048
 
+# B and B2 only: the question in ADR 0002 is whether 8-16 kHz helps with or without the
+# bearing-identity shortcut. All five scenarios at 32 kHz would add ~4 h of CNN training.
 results-32k:
-	.venv/bin/python -m bearing.run --data data/processed/paderborn-32k --out results/paderborn-32k
+	.venv/bin/python -m bearing.run --data data/processed/paderborn-32k --out results/paderborn-32k --scenarios B_recording,B2_bearing
 
 serve-fixture:
 	.venv/bin/python scripts/fixture_model.py models/fixture

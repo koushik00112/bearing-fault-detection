@@ -112,7 +112,7 @@ class CNNModel:
                 loss = loss_fn(net(xb), yb)
                 loss.backward()
                 opt.step()
-                total += float(loss) * len(idx)
+                total += loss.item() * len(idx)
             record = {"epoch": epoch, "train_loss": total / len(train)}
             if val is not None and len(val):
                 self.net = net
