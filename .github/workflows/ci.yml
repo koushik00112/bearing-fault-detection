@@ -47,7 +47,7 @@ jobs:
       - run: python -m bearing.prepare synthetic --out data/processed/synthetic
       - run: python -m bearing.run --data data/processed/synthetic --out results/ci-smoke --quick --seeds 0,1 --no-mlflow
       - run: grep -q "SYNTHETIC DATA" results/ci-smoke/summary.md
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: synthetic-smoke-report
           path: |
