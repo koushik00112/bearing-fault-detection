@@ -1,5 +1,7 @@
 # Bearing Fault Detection
 
+[![CI](https://github.com/koushik00112/bearing-fault-detection/actions/workflows/ci.yml/badge.svg)](https://github.com/koushik00112/bearing-fault-detection/actions/workflows/ci.yml)
+
 Classifies bearing faults (healthy / inner race / outer race) from vibration and motor
 current, with an evaluation protocol designed to show **how much of the score survives
 when the test data is genuinely new**. The model is served as an API and plugged into the
